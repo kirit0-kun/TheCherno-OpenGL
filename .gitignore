@@ -1,0 +1,4 @@
+#gcc output
+*.gch
+*.o
+*.s

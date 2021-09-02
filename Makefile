@@ -1,18 +1,27 @@
 TARGET=the_cherno
-CC=gcc
-CFLAGS=-g -Wall
+CC=g++
+CFLAGS=-g -Wall -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo #-target x86_64-apple-darwin20.6.0
 
-LIBS=-lc
-INC=-I. -Iheaders
+GLEW=glew-2.1.0
+GLFW=glfw-3.3.4
 
+DEPENDENCIES_DIR=Dependencies
+DEPENDENCIES=$(GLFW) $(GLEW)
+DEPENDENCIES_LIB_LOC=$(GLFW)/build/src $(GLEW)/lib
+
+BASE_LIBS_LOC=. $(patsubst %, $(DEPENDENCIES_DIR)/%, $(DEPENDENCIES_LIB_LOC))
+BASE_LIBS=c glfw3 GLEW
+BASE_INC=. headers
 SRCDIR= src
+SRCEXT=c
 BUILDDIR= build
+BASE_SRCS=main
 
-SRCS=main.c
-
-RELATIVE_SRCS=$(patsubst %, $(SRCDIR)/%, $(SRCS))
-
-OBJS = $(patsubst %, $(BUILDDIR)/%, $(notdir $(RELATIVE_SRCS:.c=.o)))
+INC=$(patsubst %, -I%, $(BASE_INC)) $(patsubst %, -I$(DEPENDENCIES_DIR)/%/include, $(DEPENDENCIES))
+LIBS_LOC=$(patsubst %, -L%, $(BASE_LIBS_LOC))
+LIBS=$(patsubst %, -l%, $(BASE_LIBS))
+SRCS=$(patsubst %, $(SRCDIR)/%.$(SRCEXT), $(BASE_SRCS))
+OBJS = $(patsubst %, $(BUILDDIR)/%, $(notdir $(SRCS:.$(SRCEXT)=.o)))
 
 all: buildFiles
 	./$(BUILDDIR)/${TARGET}
@@ -22,12 +31,12 @@ leaks: buildFiles
 
 buildFiles: $(BUILDDIR) $(TARGET)
 
-$(BUILDDIR)/%.o: $(SRCDIR)/%.c
+$(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 	$(CC) $(CFLAGS) $(INC) -S $< -o $(@:.o=.s)
 
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(LIBS) -o $(BUILDDIR)/$@ $^
+	$(CC) $(CFLAGS) $(LIBS_LOC) $(LIBS) -o $(BUILDDIR)/$@ $^
 
 $(BUILDDIR):
 	mkdir -p $(BUILDDIR)

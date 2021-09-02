@@ -13,7 +13,7 @@ BASE_LIBS_LOC=. $(patsubst %, $(DEPENDENCIES_DIR)/%, $(DEPENDENCIES_LIB_LOC))
 BASE_LIBS=c glfw3 GLEW
 BASE_INC=. headers
 SRCDIR= src
-SRCEXT=c
+SRCEXT=cpp
 BUILDDIR= build
 BASE_SRCS=main
 
@@ -24,10 +24,10 @@ SRCS=$(patsubst %, $(SRCDIR)/%.$(SRCEXT), $(BASE_SRCS))
 OBJS = $(patsubst %, $(BUILDDIR)/%, $(notdir $(SRCS:.$(SRCEXT)=.o)))
 
 all: buildFiles
-	./$(BUILDDIR)/${TARGET}
+	./${TARGET}
 
 leaks: buildFiles
-	./$(BUILDDIR)/${TARGET}
+	./${TARGET}
 
 buildFiles: $(BUILDDIR) $(TARGET)
 
@@ -36,7 +36,7 @@ $(BUILDDIR)/%.o: $(SRCDIR)/%.$(SRCEXT)
 	$(CC) $(CFLAGS) $(INC) -S $< -o $(@:.o=.s)
 
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(LIBS_LOC) $(LIBS) -o $(BUILDDIR)/$@ $^
+	$(CC) $(CFLAGS) $(LIBS_LOC) $(LIBS) -o $@ $^
 
 $(BUILDDIR):
 	mkdir -p $(BUILDDIR)

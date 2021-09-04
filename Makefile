@@ -15,7 +15,7 @@ BASE_INC=. headers
 SRCDIR= src
 SRCEXT=cpp
 BUILDDIR= build
-BASE_SRCS=main
+BASE_SRCS=../main
 
 INC=$(patsubst %, -I%, $(BASE_INC)) $(patsubst %, -I$(DEPENDENCIES_DIR)/%/include, $(DEPENDENCIES))
 LIBS_LOC=$(patsubst %, -L%, $(BASE_LIBS_LOC))

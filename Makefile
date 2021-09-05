@@ -2,8 +2,8 @@ TARGET=the_cherno
 CC=g++
 CFLAGS=-g -Wall -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo #-target x86_64-apple-darwin20.6.0
 
-GLEW=glew-2.1.0
-GLFW=glfw-3.3.4
+GLEW=glew
+GLFW=glfw
 
 DEPENDENCIES_DIR=Dependencies
 DEPENDENCIES=$(GLFW) $(GLEW)
